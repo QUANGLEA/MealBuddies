@@ -27,7 +27,7 @@ export default function MultipleCarousel({ children }) {
             max: 3000,
             min: 1024,
           },
-          items: 9,
+          items: 6,
           partialVisibilityGutter: 40,
         },
         mobile: {

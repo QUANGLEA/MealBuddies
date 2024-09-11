@@ -1,7 +1,7 @@
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import Image from "next/image";
 import { useState } from "react";
-import wheatIcon from "../../public/images/wheat_icon.png";
+import wheatIcon from "../../public/images/allergies/wheat_icon.png";
 
 export default function ExcludeIngredientCard() {
   const [isClicked, setIsClicked] = useState(false);

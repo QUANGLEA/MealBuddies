@@ -1,9 +1,9 @@
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import Image from "next/image";
 import { useState } from "react";
-import wheatIcon from "../../public/images/wheat_icon.png";
+import wheatIcon from "../../public/images/allergies/wheat_icon.png";
 
-export default function DietCard() {
+export default function DietCard({ name, icon }) {
   const [isClicked, setIsClicked] = useState(false);
   const handleClick = () => {
     setIsClicked(!isClicked);
@@ -19,12 +19,12 @@ export default function DietCard() {
       />
       <Image
         className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-100%]"
-        src={wheatIcon}
+        src={icon}
         alt="wheat-free icon"
-        width="20"
+        width="30"
       ></Image>
-      <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[20%] text-[0.5rem]">
-        WHEAT-FREE
+      <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[20%] text-[0.6rem]">
+        {name}
       </div>
     </div>
   );
