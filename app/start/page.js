@@ -28,7 +28,7 @@ export default function Start() {
       <div className="mt-2.5 mb-2.5 h-24"></div>
       <div className="text-black">What is your favorite cuisine?</div>
 
-      <FormControlLabel
+      {/* <FormControlLabel
         control={<Switch checked={checked} onChange={handleChange} />}
         label="Show"
       />
@@ -40,8 +40,8 @@ export default function Start() {
             ))}
           </MultipleCarousel>
         }
-      </Slide>
-      {/* <div className="text-black">Do you have any food allergies?</div>
+      </Slide> */}
+      <div className="text-black">Do you have any food allergies?</div>
       <MultipleCarousel>
         {foodCards.map((index) => (
           <AllergyCard key={index} />
@@ -61,7 +61,7 @@ export default function Start() {
           <ExcludeIngredientCard key={index} />
         ))}
       </MultipleCarousel>
-      <AutocompleteSearch /> */}
+      <AutocompleteSearch />
     </main>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Autocomplete } from "@mui/material";
+const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
 export default function AutocompleteSearch() {
   const [query, setQuery] = useState(""); // The search input
@@ -8,12 +9,18 @@ export default function AutocompleteSearch() {
 
   // Handle API calls as the user types
   useEffect(() => {
+    setLoading(true);
     fetch(
-      `https://api.spoonacular.com/food/ingredients/autocomplete?query=${query}&number=10&apiKey=0eed779fa71b4c38ae1a0042cfd90e09`
+      `https://api.spoonacular.com/food/ingredients/autocomplete?query=${query}&number=10&apiKey=${apiKey}`
     )
       .then((res) => res.json())
       .then((data) => {
-        setOptions(data);
+        if (data != null) {
+          setOptions(data);
+        } else {
+          setOptions([]);
+        }
+
         setLoading(false);
       });
   }, [query]); // Trigger API call when query changes
