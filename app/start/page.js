@@ -14,12 +14,13 @@ import AutocompleteSearch from "../api/search/AutocompleteSearch";
 import { cuisines } from "../data/cuisines";
 import { diets } from "../data/diets";
 import { allergies } from "../data/allergies";
+import { ingredients } from "../data/ingredients";
 
 export default function Start() {
   console.log("This is cuisines: " + cuisines);
   return (
     <main className="flex flex-col w-screen h-screen items-center bg-gray-200">
-      <div className="mt-2.5 mb-2.5 h-24"></div>
+      <div className="mt-1 mb-1 h-24"></div>
       <div className="text-black">What is your favorite cuisine?</div>
 
       <MultipleCarousel>
@@ -42,11 +43,15 @@ export default function Start() {
       <div className="text-black">
         Do you wish to exclude any ingredients from your recommended recipes?
       </div>
-      {/* <MultipleCarousel>
-        {foodCards.map((index) => (
-          <ExcludeIngredientCard key={index} />
+      <MultipleCarousel>
+        {ingredients.map((ingredient, index) => (
+          <ExcludeIngredientCard
+            name={ingredient.name}
+            icon={ingredient.icon}
+            key={index}
+          />
         ))}
-      </MultipleCarousel> */}
+      </MultipleCarousel>
       <AutocompleteSearch />
     </main>
   );
