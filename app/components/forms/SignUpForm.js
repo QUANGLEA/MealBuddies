@@ -1,11 +1,25 @@
-"use-client";
+"use client";
 
+import { useFormState } from "react-dom";
 import { registerUserAction } from "@/app/data/actions/auth-actions";
 import * as motion from "framer-motion/client";
 import { User, Mail, Lock } from "lucide-react";
 import Link from "next/link";
+import { ZodErrors } from "../ZodErrors";
+
+const INITIAL_STATE = {
+  data: null,
+  zodErrors: null,
+  message: null,
+};
 
 export default function SignUpForm() {
+  const [formState, formAction] = useFormState(
+    registerUserAction,
+    INITIAL_STATE
+  );
+
+  console.log(formState, "client");
   return (
     <div className="w-full max-w-md">
       <motion.div
@@ -28,12 +42,12 @@ export default function SignUpForm() {
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={registerUserAction}>
+        <form className="mt-8 space-y-6" action={formAction}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="name" className="sr-only">
-                Full Name
+              <label htmlFor="username" className="sr-only">
+                Username
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -43,15 +57,14 @@ export default function SignUpForm() {
                   />
                 </div>
                 <input
-                  id="name"
-                  name="name"
+                  id="username"
+                  name="username"
                   type="text"
-                  autoComplete="name"
-                  required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                   placeholder="Username"
                 />
               </div>
+              <ZodErrors error={formState?.zodErrors?.username} />
             </div>
             <div>
               <label htmlFor="email-address" className="sr-only">
@@ -68,12 +81,11 @@ export default function SignUpForm() {
                   id="email-address"
                   name="email"
                   type="text"
-                  autoComplete="email"
-                  required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                   placeholder="Email address"
                 />
               </div>
+              <ZodErrors error={formState?.zodErrors?.email} />
             </div>
             <div>
               <label htmlFor="password" className="sr-only">
@@ -90,19 +102,18 @@ export default function SignUpForm() {
                   id="password"
                   name="password"
                   type="password"
-                  autoComplete="new-password"
-                  required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                   placeholder="Password"
                 />
               </div>
+              <ZodErrors error={formState?.zodErrors?.password} />
             </div>
           </div>
 
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              className="relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
               Create Account
             </button>

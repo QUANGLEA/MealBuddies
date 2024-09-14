@@ -68,7 +68,7 @@ export default function LandingPage() {
             </h1>
             <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Effortlessly plan your weekly meals, generate shopping lists, and
-              discover new recipes with MealMaster.
+              discover new recipes with MealBuddies.
             </p>
             <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
               <div className="rounded-md shadow">

@@ -22,13 +22,15 @@ export default function Start() {
     <main className="flex flex-col w-screen h-screen items-center bg-gray-200">
       <div className="mt-1 mb-1 h-24"></div>
       <div className="text-black">What is your favorite cuisine?</div>
-
-      <MultipleCarousel>
-        {cuisines.map((cuisine, index) => (
-          <CuisineCard name={cuisine.name} img={cuisine.img} key={index} />
-        ))}
-      </MultipleCarousel>
-      <div className="text-black">Do you have any food allergies?</div>
+      <div className="flex flex-col">
+        <MultipleCarousel>
+          {cuisines.map((cuisine, index) => (
+            <CuisineCard name={cuisine.name} img={cuisine.img} key={index} />
+          ))}
+        </MultipleCarousel>
+        <button />
+      </div>
+      {/* <div className="text-black">Do you have any food allergies?</div>
       <MultipleCarousel>
         {allergies.map((allergy, index) => (
           <AllergyCard name={allergy.name} icon={allergy.icon} key={index} />
@@ -52,7 +54,7 @@ export default function Start() {
           />
         ))}
       </MultipleCarousel>
-      <AutocompleteSearch />
+      <AutocompleteSearch /> */}
     </main>
   );
 }
