@@ -1,11 +1,37 @@
-"use-client";
+"use client";
 
-import { registerUserAction } from "@/app/data/actions/auth-actions";
+import {
+  registerUserAction,
+  signInUserAction,
+} from "@/data/actions/auth-actions";
 import * as motion from "framer-motion/client";
 import { Mail, Lock } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function SignInForm() {
+  const router = useRouter();
+  const [error, setError] = useState("");
+  async function onSignIn(event) {
+    event.preventDefault();
+    try {
+      const formData = new FormData(event.currentTarget);
+
+      const response = await signInUserAction(formData);
+
+      if (!!response.error) {
+        console.error(response.error);
+        setError(response.error.message);
+      } else {
+        router.push("/prep");
+      }
+    } catch (e) {
+      console.error(e);
+      setError("Failed to login. Please check your credentials!");
+    }
+  }
+
   return (
     <div className="w-full max-w-md">
       <motion.div
@@ -28,7 +54,7 @@ export default function SignInForm() {
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={registerUserAction}>
+        <form className="mt-8 space-y-6" onSubmit={onSignIn}>
           <div className="rounded-md shadow-sm -space-y-px grid grid-cols-1">
             <label htmlFor="email-address" className="sr-only">
               Email Address
@@ -100,14 +126,14 @@ export default function SignInForm() {
             </div>
           </div>
 
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-            >
-              Sign in
-            </button>
-          </div>
+          <div className="text-red-500">{error}</div>
+
+          <button
+            type="submit"
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          >
+            Sign in
+          </button>
         </form>
       </motion.div>
     </div>

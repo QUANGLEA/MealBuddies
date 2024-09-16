@@ -1,16 +1,15 @@
-import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import Image from "next/image";
 import { useState } from "react";
-import wheatIcon from "../../public/images/allergies/wheat_icon.png";
 
-export default function ExcludeIngredientCard({ name, icon }) {
+export default function DietCard({ name, icon }) {
   const [isClicked, setIsClicked] = useState(false);
   const handleClick = () => {
     setIsClicked(!isClicked);
   };
   return (
     <div className="flex justify-center text-black">
-      <BlockOutlinedIcon
+      <CircleOutlinedIcon
         onClick={handleClick}
         sx={{ fontSize: 110 }}
         className={`${

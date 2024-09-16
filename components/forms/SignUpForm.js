@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormState } from "react-dom";
-import { registerUserAction } from "@/app/data/actions/auth-actions";
+import { registerUserAction } from "@/data/actions/auth-actions";
 import * as motion from "framer-motion/client";
 import { User, Mail, Lock } from "lucide-react";
 import Link from "next/link";
@@ -11,6 +11,7 @@ const INITIAL_STATE = {
   data: null,
   zodErrors: null,
   message: null,
+  isSuccess: false,
 };
 
 export default function SignUpForm() {
@@ -19,7 +20,6 @@ export default function SignUpForm() {
     INITIAL_STATE
   );
 
-  console.log(formState, "client");
   return (
     <div className="w-full max-w-md">
       <motion.div

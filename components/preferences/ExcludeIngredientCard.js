@@ -1,9 +1,8 @@
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
-import wheatIcon from "../../public/images/allergies/wheat_icon.png";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function AllergyCardCard({ name, icon }) {
+export default function ExcludeIngredientCard({ name, icon }) {
   const [isClicked, setIsClicked] = useState(false);
   const handleClick = () => {
     setIsClicked(!isClicked);

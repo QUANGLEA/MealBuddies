@@ -14,7 +14,7 @@ export default function CuisineCard({ name, img }) {
         width={90}
         height={90}
         src={isClicked ? transparentBg : img}
-        alt=""
+        alt="cuisine"
         onClick={handleClick}
       />
       <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">

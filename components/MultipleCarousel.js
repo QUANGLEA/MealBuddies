@@ -8,13 +8,11 @@ export default function MultipleCarousel({ children }) {
       arrows
       autoPlaySpeed={3000}
       centerMode={false}
-      className="m-10"
+      className="m-10 w-full"
       containerClass="container"
-      dotListClass=""
-      draggable
+      draggable={false}
       focusOnSelect={false}
       infinite={false}
-      itemClass=""
       keyBoardControl
       minimumTouchDrag={80}
       pauseOnHover
@@ -52,7 +50,6 @@ export default function MultipleCarousel({ children }) {
       rtl={false}
       shouldResetAutoplay
       showDots={false}
-      sliderClass=""
       slidesToSlide={1}
       swipeable
     >
