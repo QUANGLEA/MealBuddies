@@ -2,13 +2,18 @@ import Image from "next/image";
 import transparentBg from "../../public/images/transparent_bg.png";
 import { useState } from "react";
 
-export default function CuisineCard({ name, img }) {
+export default function CuisineCard({ name, img, handleSelectCuisine }) {
   const [isClicked, setIsClicked] = useState(false);
   const handleClick = () => {
     setIsClicked(!isClicked);
   };
   return (
-    <div className="flex justify-center text-white text-sm">
+    <div
+      onClick={() => {
+        handleSelectCuisine(name);
+      }}
+      className="flex justify-center text-white text-sm"
+    >
       <Image
         className="rounded-full transition ease-in-out delay-100 hover:opacity-50 bg-green-600"
         width={90}

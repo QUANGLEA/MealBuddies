@@ -1,15 +1,22 @@
-import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function ExcludeIngredientCard({ name, icon }) {
+export default function IncludeIngredientCard({
+  name,
+  icon,
+  handleSelectIngredient,
+}) {
   const [isClicked, setIsClicked] = useState(false);
   const handleClick = () => {
     setIsClicked(!isClicked);
   };
   return (
-    <div className="flex justify-center text-black">
-      <BlockOutlinedIcon
+    <div
+      onClick={() => handleSelectIngredient(name)}
+      className="flex justify-center text-black"
+    >
+      <CircleOutlinedIcon
         onClick={handleClick}
         sx={{ fontSize: 110 }}
         className={`${

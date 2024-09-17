@@ -2,13 +2,16 @@ import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function DietCard({ name, icon }) {
+export default function DietCard({ name, icon, handleSelectDiet }) {
   const [isClicked, setIsClicked] = useState(false);
   const handleClick = () => {
     setIsClicked(!isClicked);
   };
   return (
-    <div className="flex justify-center text-black">
+    <div
+      onClick={() => handleSelectDiet(name)}
+      className="flex justify-center text-black"
+    >
       <CircleOutlinedIcon
         onClick={handleClick}
         sx={{ fontSize: 110 }}

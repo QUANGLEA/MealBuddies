@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
+import { server } from "@/app/layout";
 
 const schemaRegister = z.object({
   username: z.string().min(3).max(20, {
@@ -53,7 +54,7 @@ export async function registerUserAction(prevState, formData) {
       message: "Missing Fields. Failed to Register",
     };
   }
-  const response = await fetch("http://localhost:3000/api/register", {
+  const response = await fetch(`${server}/api/register`, {
     method: "POST",
     headers: {
       "content-type": "application/json",

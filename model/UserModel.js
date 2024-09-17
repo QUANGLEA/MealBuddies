@@ -13,6 +13,10 @@ const userSchema = new Schema({
     required: true,
     type: String,
   },
+  preference: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Preference",
+  },
 });
 
 export const User = mongoose.models.User ?? mongoose.model("User", userSchema);

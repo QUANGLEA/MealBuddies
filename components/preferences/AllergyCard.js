@@ -2,13 +2,16 @@ import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function AllergyCard({ name, icon }) {
+export default function AllergyCard({ name, icon, handleSelectAllergy }) {
   const [isClicked, setIsClicked] = useState(false);
   const handleClick = () => {
     setIsClicked(!isClicked);
   };
   return (
-    <div className="flex justify-center text-black">
+    <div
+      onClick={() => handleSelectAllergy(name)}
+      className="flex justify-center text-black"
+    >
       <BlockOutlinedIcon
         onClick={handleClick}
         sx={{ fontSize: 110 }}

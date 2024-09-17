@@ -9,9 +9,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
-  session: {
-    strategy: "jwt",
-  },
+  session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -28,11 +26,7 @@ export const {
           });
           console.log(user);
           if (user) {
-            const isMatch = await bcrypt.compare(
-              credentials.password,
-              user.password
-            );
-
+            const isMatch = bcrypt.compare(credentials.password, user.password);
             if (isMatch) {
               return user;
             } else {
@@ -47,4 +41,22 @@ export const {
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      // This is where the user info is added to the token
+      if (user) {
+        token.name = user.username; // Adding user name to the token
+        token.email = user.email; // Adding user email to the token
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Update the session object based on the token
+      if (token) {
+        session.user.name = token.name; // Here, you update the user name
+        session.user.email = token.email;
+      }
+      return session;
+    },
+  },
 });
