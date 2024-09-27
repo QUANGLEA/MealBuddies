@@ -18,6 +18,13 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
+    colors: {
+      goldenSand: "#f2cc8f",
+      sageGreen: "#81b29a",
+      indigoNight: "#3d405b",
+      coralSunset: "#e07a5f",
+      ivoryCream: "#f4f1de",
+    },
   },
   darkMode: "class",
   plugins: [flowbite.plugin(), nextui()],
