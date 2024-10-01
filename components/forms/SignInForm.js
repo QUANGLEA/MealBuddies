@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  registerUserAction,
-  signInUserAction,
-} from "@/data/actions/auth-actions";
+import { signInUserAction } from "@/data/actions/auth-actions";
 import * as motion from "framer-motion/client";
 import { Mail, Lock } from "lucide-react";
 import Link from "next/link";
@@ -24,7 +21,7 @@ export default function SignInForm() {
         console.error(response.error);
         setError(response.error.message);
       } else {
-        router.push("/prep");
+        router.push("/start");
       }
     } catch (e) {
       console.error(e);

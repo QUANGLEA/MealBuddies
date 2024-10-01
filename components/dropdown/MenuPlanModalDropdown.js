@@ -6,7 +6,11 @@ import {
 } from "@nextui-org/react";
 import { useState, useMemo } from "react";
 
-export default function MenuPlanModalDropdown({ children, firstOption }) {
+export default function MenuPlanModalDropdown({
+  children,
+  firstOption,
+  disabledKeys,
+}) {
   const [selectedKeys, setSelectedKeys] = useState(new Set([firstOption]));
   const selectedValue = useMemo(
     () => Array.from(selectedKeys).join(),
@@ -26,6 +30,7 @@ export default function MenuPlanModalDropdown({ children, firstOption }) {
         selectionMode="single"
         selectedKeys={selectedKeys}
         onSelectionChange={setSelectedKeys}
+        disabledKeys={disabledKeys}
       >
         {children}
       </DropdownMenu>

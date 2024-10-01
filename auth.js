@@ -24,7 +24,6 @@ export const {
           const user = await User.findOne({
             email: credentials?.email,
           });
-          console.log(user);
           if (user) {
             const isMatch = bcrypt.compare(credentials.password, user.password);
             if (isMatch) {

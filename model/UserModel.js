@@ -16,6 +16,17 @@ const userSchema = new Schema({
   preference: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Preference",
+    default: null,
+  },
+  plannedRecipe: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "PlannedRecipe",
+    default: null,
+  },
+  mealPlan: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "MealPlan",
+    default: null,
   },
 });
 

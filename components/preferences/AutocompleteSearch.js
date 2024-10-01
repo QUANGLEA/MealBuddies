@@ -37,7 +37,7 @@ export default function AutocompleteSearch() {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Add other ingredients to exclude"
+            label="Add other ingredients to include"
             variant="outlined"
           />
         )}

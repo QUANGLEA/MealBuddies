@@ -4,6 +4,18 @@ import { Preference } from "@/model/PreferenceModel";
 import { User } from "@/model/UserModel";
 import { auth } from "@/auth";
 
+export async function getUserPreferences() {
+  const session = await auth();
+  try {
+    const user = await User.findOne({ email: session?.user.email });
+    const preferenceId = user.preference;
+    const preferences = await Preference.findById(preferenceId);
+    return preferences;
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 export async function createPreferences(preferencesData) {
   const session = await auth();
   try {

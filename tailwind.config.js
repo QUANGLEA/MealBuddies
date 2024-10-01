@@ -19,6 +19,7 @@ module.exports = {
       },
     },
     colors: {
+      lightGoldenSand: "#f9e1b8",
       goldenSand: "#f2cc8f",
       sageGreen: "#81b29a",
       indigoNight: "#3d405b",

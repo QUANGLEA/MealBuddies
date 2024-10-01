@@ -27,8 +27,7 @@ export const POST = async (request) => {
     });
   }
 
-  // Add user info to DB
-  return new NextResponse("Preferences has been has been created", {
+  return new NextResponse("Preferences has been created", {
     status: 200,
   });
 };

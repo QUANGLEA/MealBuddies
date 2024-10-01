@@ -8,8 +8,10 @@ import AllergyCarousel from "../../components/carousels/AllergyCarousel";
 import DietCarousel from "../../components/carousels/DietCarousel";
 import IncludeIngredientCarousel from "../../components/carousels/IncludeIngredientCarousel";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Start() {
+  const router = useRouter();
   const carouselRef = useRef(null);
   const NUM_SLIDES = 4;
   const [slideNum, setSlideNum] = useState(1);
@@ -51,13 +53,10 @@ export default function Start() {
         allergies: selectedAllergies,
         ingredients: selectedIngredients,
       };
-      console.log(newPreferences);
       try {
         const response = await fetch("/api/preferences/add", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             preferences: newPreferences,
           }),
@@ -74,6 +73,7 @@ export default function Start() {
     };
 
     handleSubmitPreferences();
+    router.push("/prep");
   }, [
     isSubmitted,
     selectedCuisines,

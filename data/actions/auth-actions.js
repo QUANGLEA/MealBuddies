@@ -35,7 +35,6 @@ export async function signInUserAction(formData) {
 }
 
 export async function registerUserAction(prevState, formData) {
-  console.log("Hello from Register User Action");
   const username = formData.get("username");
   const password = formData.get("password");
   const email = formData.get("email");
