@@ -1,7 +1,7 @@
 "use server";
 
 import { User } from "@/model/UserModel";
-import { MealPlan } from "@/model/MealPlan";
+import { MealPlan } from "@/model/MealPlanModel";
 import { auth } from "@/auth";
 
 export async function getMealPlan() {

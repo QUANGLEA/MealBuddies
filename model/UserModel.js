@@ -28,6 +28,11 @@ const userSchema = new Schema({
     ref: "MealPlan",
     default: null,
   },
+  favoritedRecipe: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "FavoritedRecipe",
+    default: null,
+  },
 });
 
 export const User = mongoose.models.User ?? mongoose.model("User", userSchema);

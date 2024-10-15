@@ -11,7 +11,7 @@ export const GET = async () => {
     const allergiesParam = allergies.join(",");
     const ingredientsParam = ingredients.join(",");
     const response = await fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?number=3&addRecipeInformation=true&fillIngredients=true&addRecipeNutrition=true&cuisine=${cuisinesParam}&diet=${dietsParam}&intolerances=${allergiesParam}&includeIngredients=${ingredientsParam}&apiKey=${apiKey}`,
+      `https://api.spoonacular.com/recipes/complexSearch?number=7&addRecipeInformation=true&fillIngredients=true&addRecipeNutrition=true&cuisine=${cuisinesParam}&diet=${dietsParam}&intolerances=${allergiesParam}&includeIngredients=${ingredientsParam}&apiKey=${apiKey}`,
       {
         method: "GET",
         headers: {
