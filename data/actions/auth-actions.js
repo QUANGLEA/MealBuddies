@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { redirect } from "next/navigation";
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { server } from "@/app/layout";
 
 const schemaRegister = z.object({
@@ -18,7 +18,7 @@ const schemaRegister = z.object({
 });
 
 export async function signOutUserAction() {
-  await signOut({ redirectTo: "/login" });
+  await signOut({ redirectTo: "/signin" });
 }
 
 export async function signInUserAction(formData) {

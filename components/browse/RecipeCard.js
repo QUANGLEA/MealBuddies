@@ -9,14 +9,40 @@ import { Card, CardBody } from "@nextui-org/react";
 import { motion } from "framer-motion";
 
 export default function RecipeCard({ recipe }) {
-  const [isFavorited, setIsFavorited] = useState(recipe.isFavorited);
-  const [isSaved, setIsSaved] = useState(recipe.isSaved);
-  const handleSaveClick = () => {
-    setIsSaved(!isSaved);
-  };
-  const handleFavoriteClick = () => {
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  const handleFavoriteClick = async () => {
     setIsFavorited(!isFavorited);
+    try {
+      let response;
+      if (!isFavorited) {
+        response = await fetch("/api/favorited-recipes/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipe: recipe,
+          }),
+        });
+      } else {
+        response = await fetch("/api/favorited-recipes/remove", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipeId: recipe.id,
+          }),
+        });
+      }
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      console.log("Favorited recipe updated successfully:", response);
+    } catch (e) {
+      console.error("Error updating favorited recipes:", e);
+    }
   };
+
   return (
     <Card className="flex flex-col items-center h-full w-full shadow-2xl rounded-xl space-y-2 bg-transparent">
       <Image
@@ -24,11 +50,11 @@ export default function RecipeCard({ recipe }) {
         alt={recipe.title}
         height={150}
         width={150}
-        className="w-full"
+        className="w-full rounded-xl"
       />
       <CardBody>
         <div className="flex w-full justify-between items-center px-3">
-          <Rating defaultValue={4} />
+          <Rating defaultValue={recipe.rating} precision={0.1} readOnly />
           <motion.button
             onClick={handleFavoriteClick}
             className="focus:outline-none"
@@ -57,10 +83,8 @@ export default function RecipeCard({ recipe }) {
         </div>
 
         <div className="p-4 rounded-xl flex flex-col space-y-2">
-          <p className="text-lg font-bold">
-            Fried rice with pineapple and soy sauce
-          </p>
-          <p className="text-sm text-gray-500">Full Belly Sisters</p>
+          <p className="text-lg font-bold">{recipe.name}</p>
+          <p className="text-sm text-gray-600">{recipe.author}</p>
         </div>
       </CardBody>
     </Card>

@@ -40,6 +40,16 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
+import { Spacer } from "@nextui-org/react";
+import HomeIcon from "@mui/icons-material/Home";
+import SearchIcon from "@mui/icons-material/Search";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import RamenDiningIcon from "@mui/icons-material/RamenDining";
+import { Avatar } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/react";
+import { signOutUserAction } from "@/data/actions/auth-actions";
+import { useRouter } from "next/navigation";
 
 const ShoppingListOptions = Object.freeze({
   EMPTY: 0,
@@ -107,6 +117,8 @@ const getOccupiedMeals = (weekPlan, day) => {
 };
 
 export default function Prep() {
+  const router = useRouter();
+
   // Miscellaneous
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -175,6 +187,10 @@ export default function Prep() {
     },
   ]);
 
+  // Favorited Recipes
+  const [favoritedRecipes, setFavoritedRecipes] = useState([]);
+  const [recipeGroup, setRecipeGroup] = useState("suggested");
+
   // Week Plan
   const [mealPlan, setMealPlan] = useState([]); // [{ day, meal }] each index is a serving
   const [currentServing, setCurrentServing] = useState(0);
@@ -193,12 +209,22 @@ export default function Prep() {
   useEffect(() => {
     const getSuggestedRecipes = async () => {
       try {
-        /* const response = await fetch("/api/recipe/getSuggestedRecipes");
+        let response = await fetch("/api/recipe/getSuggestedRecipes");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const result = await response.json();
-        setSuggestedRecipes(result); */
+        let result = await response.json();
+        setSuggestedRecipes(result);
+
+        response = await fetch("/api/favorited-recipes/get");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        result = await response.json();
+        if (Object.keys(result).length != 0) {
+          console.log("Hello");
+          setFavoritedRecipes(result.favoritedRecipes);
+        }
       } catch (e) {
         console.log(e);
       } finally {
@@ -538,511 +564,544 @@ export default function Prep() {
 
   return (
     <DndContext modifiers={[restrictToWindowEdges]} onDragEnd={onDragEnd}>
-      <div className="grid grid-cols-3 h-screen bg-indigoNight p-5 space-x-5">
-        <div className="flex flex-col col-span-2">
-          {/* <div
-          className={`fixed inset-y-0 left-0 transform ${
-            isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          } w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out z-20`}
-        >
-          <div className="p-5 text-black">
-            <button
-              onClick={() => setIsMenuOpen(false)}
-              className="absolute top-5 right-5"
-            >
-              <X className="h-6 w-6 text-gray-600" />
-            </button>
-            <nav className="mt-8">
-              <a
-                href="/"
-                className="flex py-2.5 px-4 rounded transition duration-200 hover:bg-green-100 items-center"
-              >
-                <Home className="h-5 w-5 mr-3" /> Home
-              </a>
-              <a
-                href="/recipes"
-                className="flex py-2.5 px-4 rounded transition duration-200 hover:bg-green-100 items-center"
-              >
-                <Book className="h-5 w-5 mr-3" /> Browse Recipes
-              </a>
-              <a
-                href="/grocery-list"
-                className="flex py-2.5 px-4 rounded transition duration-200 hover:bg-green-100 items-center"
-              >
-                <ShoppingCart className="h-5 w-5 mr-3" /> Grocery List
-              </a>
-              <a
-                href="/settings"
-                className="flex *:py-2.5 px-4 rounded transition duration-200 hover:bg-green-100 items-center"
-              >
-                <Settings className="h-5 w-5 mr-3" /> Settings
-              </a>
-            </nav>
+      <div className="min-h-screen py-8 px-5 bg-lightGoldenSand text-black space-y-10">
+        <header className="flex justify-between space-x-10 items-center">
+          <h1 className="text-2xl font-bold">MealBuddies</h1>
+          <div className="text-4xl font-bold">Meal Planner</div>
+          <div className="flex items-center space-x-3">
+            <Avatar
+              onClick={() => signOutUserAction()}
+              isBordered
+              color="danger"
+              className="cursor-pointer"
+              src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+            />
+            <div className="min-w-max">John Doe</div>
           </div>
-        </div> */}
-          {/* Hamburger Icon */}
-          {/* <button
-          onClick={() => setIsMenuOpen(true)}
-          className="fixed top-5 left-5 z-10"
-        >
-          <Menu className="h-6 w-6 text-green-800" />
-        </button> */}
-          <div className="basis-7/12 mb-5">
-            <Card className="h-full flex flex-col">
-              <CardHeader className="text-2xl font-bold bg-coralSunset">
-                Weekly Meal Plan
-              </CardHeader>
-              <CardBody className="bg-goldenSand h-full flex-1">
-                <div className="grid grid-cols-7 gap-2 flex-1 h-full">
-                  {DAYS.map((day) => (
-                    <div
-                      key={day}
-                      className="flex flex-col items-center text-black font-semibold"
-                    >
-                      {day}
-                    </div>
-                  ))}
-                  {MEALS.map((meal, i) =>
-                    DAYS.map((day, j) => {
-                      const recipe = weekPlan[day][meal];
-                      return (
-                        <div
-                          key={`${i}${j}`}
-                          className="flex flex-col bg-ivoryCream text-center text-black h-24 rounded-lg shadow-md p-2"
-                        >
-                          <div className="flex-none text-xs font-medium mb-1">
-                            {meal}
-                          </div>
-                          <Droppable id={`${day}.${meal}`}>
-                            {recipe ? (
-                              <Draggable recipe={recipe} id={recipe.id}>
-                                <DraggableRecipeCard
-                                  recipe={recipe}
-                                  day={day}
-                                  meal={meal}
-                                />
-                              </Draggable>
-                            ) : (
-                              <div
-                                id={`${day}.${meal}`}
-                                className="flex h-full border-2 border-dashed border-sageGreen rounded text-sageGreen justify-center items-center text-xs"
-                              >
-                                {"Drop meal here"}
-                              </div>
-                            )}
-                          </Droppable>
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
-              </CardBody>
-            </Card>
-          </div>
-
-          <div className="basis-3/12 text-black box-border">
-            <Card className="flex flex-col justify-center h-full">
-              <CardHeader className="text-lg font-bold text-black bg-coralSunset">
-                Suggested Recipes
-              </CardHeader>
-              <CardBody className="bg-goldenSand h-full overflow-hidden flex-grow">
-                {loadingSuggestedRecipes ? (
-                  <p>Fetching your delicious recipes...</p>
-                ) : (
-                  <div className="flex overflow-x-auto no-scrollbar">
-                    {suggestedRecipes.map((recipe, index) => (
-                      <RecipeCard
-                        key={index}
-                        id={recipe.id}
-                        onOpen={recipeModalConfig.onOpen}
-                        recipe={recipe}
-                        setActiveRecipe={setActiveRecipe}
-                        setPendingModalOpen={setPendingModalOpen}
-                      />
-                    ))}
-                  </div>
-                )}
-              </CardBody>
-            </Card>
-          </div>
-        </div>
-        <div className="flex flex-col max-h-full overflow-y-auto no-scrollbar text-black rounded-lg bg-goldenSand p-5">
-          <div className="flex items-center justify-between">
-            <div className="font-bold text-xl">Shopping List</div>
-            <Dropdown className="text-black">
-              <DropdownTrigger>
-                <Button variant="light" className="text-xl">
-                  ...
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="shopping list more actions"
-                disabledKeys={["uncheck all"]}
+        </header>
+        <div className="grid grid-cols-9 space-x-5 text-black h-screen">
+          <nav className="col-span-1 pr-6">
+            <h2 className="text-gray-500 mb-2">DISCOVER</h2>
+            <ul className="space-y-2">
+              <li className="flex items-center px-3 py-1">
+                <HomeIcon size={18} className="mr-2" /> Home
+              </li>
+              <li
+                className="flex items-center px-3 py-1 cursor-pointer"
+                onClick={() => router.push("/browse")}
               >
-                <DropdownItem key="uncheck">Uncheck All</DropdownItem>
-                <DropdownItem key="clear">Clear list</DropdownItem>
-                <DropdownItem key="add">Add to Notes</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <Divider className="my-4" />
-          {!loadingShoppingList &&
-          shoppingListOption != ShoppingListOptions.SUGGEST &&
-          shoppingListOption != ShoppingListOptions.EMPTY ? (
-            <>
-              <div className="flex items-center space-x-2">
-                <Button
-                  onPress={() =>
-                    setShoppingListOption(ShoppingListOptions.AISLE)
-                  }
-                  variant="light"
-                  endContent={<AisleIcon />}
-                >
-                  Aisles
-                </Button>
-                <Divider orientation="vertical" />
-                <Button
-                  variant="light"
-                  onPress={() =>
-                    setShoppingListOption(ShoppingListOptions.RECIPE)
-                  }
-                  endContent={<RecipeIcon />}
-                >
-                  Recipes
-                </Button>
-              </div>
-              <Divider className="my-4" />
-            </>
-          ) : null}
-          {loadingShoppingList ? (
-            <div>Loading your shopping list...</div>
-          ) : (
-            <Card className="bg-lightGoldenSand overflow-y-auto">
-              {shoppingListOption == ShoppingListOptions.EMPTY && (
-                <>
-                  <CardHeader className="font-bold text-sm justify-between">
-                    You {" don't "} have any recipes added to your Meal Plan.
-                    <Button isIconOnly variant="light">
-                      <CloseIcon className="text-md" />
-                    </Button>
-                  </CardHeader>
-                  <CardBody className="text-xs">
-                    <div>
-                      Get started by exploring{" "}
-                      <span className="font-bold">Suggested Recipes</span> and
-                      adding a recipe to your Meal Plan.
-                    </div>
-                  </CardBody>
-                </>
-              )}
-              {shoppingListOption == ShoppingListOptions.SUGGEST && (
-                <>
-                  <CardHeader className="font-bold text-sm justify-between">
-                    Need a Shopping List for your Meal Plan?
-                    <Button isIconOnly variant="light">
-                      <CloseIcon className="text-md" />
-                    </Button>
-                  </CardHeader>
-                  <CardBody className="text-xs">
-                    Add all the ingredients you need for your Plan with a click!
-                    Want your customized list?
-                  </CardBody>
-                  <CardFooter className="space-x-4">
-                    <Button
-                      onPress={() => {
-                        setShoppingListOption(ShoppingListOptions.RECIPE);
-                      }}
-                      className="bg-coralSunset text-lightGoldenSand"
-                    >
-                      Make My List
-                    </Button>
-                    <Button
-                      variant="bordered"
-                      className="border-coralSunset text-coralSunset"
-                    >
-                      Not Now
-                    </Button>
-                  </CardFooter>
-                </>
-              )}
-              {shoppingListOption == ShoppingListOptions.AISLE && (
-                <CardBody>
-                  <Accordion
-                    selectionMode="multiple"
-                    defaultExpandedKeys={["0"]}
+                <SearchIcon size={18} className="mr-2" /> Browse
+              </li>
+              <li className="flex items-center bg-black rounded-full text-white px-3 py-1">
+                <CalendarMonthIcon size={18} className="mr-2" /> Prep
+              </li>
+            </ul>
+            <h2 className="text-gray-500 mt-6 mb-2">LIBRARY</h2>
+            <ul className="space-y-2">
+              <li className="flex items-center">
+                <FavoriteIcon size={18} className="mr-2" /> Favourites
+              </li>
+              <li className="flex items-center">
+                <RamenDiningIcon size={18} className="mr-2" /> My Recipes
+              </li>
+            </ul>
+          </nav>
+          <div className="flex flex-col col-span-6 h-full">
+            <div className="border-4 border-coralSunset bg-goldenSand p-5 rounded-xl basis-7/12 mb-5">
+              <div className="grid grid-cols-7 gap-2 flex-1 h-full">
+                {DAYS.map((day) => (
+                  <div
+                    key={day}
+                    className="flex flex-col items-center text-black font-semibold"
                   >
-                    {shoppingListByAisle.map((aisle, index) => (
-                      <AccordionItem
-                        key={index}
-                        aria-label={aisle.name}
-                        title={
-                          <div>
-                            {aisle.name + " "}
-                            <span className="text-coralSunset font-bold">
-                              {"("}
-                              {countNumUnboughtIngredients(aisle.ingredients)}
-                              {")"}
-                            </span>
-                          </div>
-                        }
+                    {day}
+                  </div>
+                ))}
+                {MEALS.map((meal, i) =>
+                  DAYS.map((day, j) => {
+                    const recipe = weekPlan[day][meal];
+                    return (
+                      <div
+                        key={`${i}${j}`}
+                        className="flex flex-col bg-ivoryCream text-center text-black h-24 rounded-lg shadow-md p-2"
                       >
-                        {aisle.ingredients.map((ingredient, index) => (
+                        <div className="flex-none text-xs font-medium mb-1">
+                          {meal}
+                        </div>
+                        <Droppable id={`${day}.${meal}`}>
+                          {recipe ? (
+                            <Draggable recipe={recipe} id={recipe.id}>
+                              <DraggableRecipeCard
+                                recipe={recipe}
+                                day={day}
+                                meal={meal}
+                              />
+                            </Draggable>
+                          ) : (
+                            <div
+                              id={`${day}.${meal}`}
+                              className="flex h-full border-2 border-dashed border-sageGreen rounded text-sageGreen justify-center items-center text-xs"
+                            >
+                              {"Drop meal here"}
+                            </div>
+                          )}
+                        </Droppable>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+
+            <div className="basis-3/12 text-black box-border ">
+              <Card className="flex flex-col justify-center h-full">
+                <CardHeader className="text-lg pb-1 font-bold text-black bg-goldenSand">
+                  <Tabs
+                    key="recipes tabs"
+                    variant="underlined"
+                    aria-label="Tabs variants"
+                    size="lg"
+                    onSelectionChange={setRecipeGroup}
+                  >
+                    <Tab key="suggested" title="Recipes for You" />
+                    <Tab key="favorite" title="Favorite Recipes" />
+                  </Tabs>
+                </CardHeader>
+                <CardBody className="bg-goldenSand h-full overflow-hidden flex-grow">
+                  {loadingSuggestedRecipes ? (
+                    <p>Fetching your delicious recipes...</p>
+                  ) : (
+                    <div className="flex overflow-x-auto no-scrollbar">
+                      {(() => {
+                        if (recipeGroup == "suggested") {
+                          return suggestedRecipes.map((recipe, index) => (
+                            <RecipeCard
+                              key={index}
+                              id={recipe.id}
+                              onOpen={recipeModalConfig.onOpen}
+                              recipe={recipe}
+                              setActiveRecipe={setActiveRecipe}
+                              setPendingModalOpen={setPendingModalOpen}
+                            />
+                          ));
+                        } else {
+                          if (favoritedRecipes.length === 0) {
+                            return (
+                              <p className="font-bold text-xl m-5">
+                                You don&apos;t have any favorite recipes. Go to
+                                the Browse page and start your exploration!
+                              </p>
+                            );
+                          } else {
+                            return favoritedRecipes.map((recipe, index) => (
+                              <RecipeCard
+                                key={index}
+                                id={recipe.id}
+                                onOpen={recipeModalConfig.onOpen}
+                                recipe={recipe}
+                                setActiveRecipe={setActiveRecipe}
+                                setPendingModalOpen={setPendingModalOpen}
+                              />
+                            ));
+                          }
+                        }
+                      })()}
+                    </div>
+                  )}
+                </CardBody>
+              </Card>
+            </div>
+          </div>
+          <div className="flex flex-col h-full overflow-y-auto no-scrollbar text-black rounded-lg bg-goldenSand p-5 col-span-2">
+            <div className="flex items-center justify-between">
+              <div className="font-bold text-xl">Shopping List</div>
+              <Dropdown className="text-black">
+                <DropdownTrigger>
+                  <Button variant="light" className="text-xl">
+                    ...
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="shopping list more actions"
+                  disabledKeys={["uncheck all"]}
+                >
+                  <DropdownItem key="uncheck">Uncheck All</DropdownItem>
+                  <DropdownItem key="clear">Clear list</DropdownItem>
+                  <DropdownItem key="add">Add to Notes</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+            <Divider className="my-4" />
+            {!loadingShoppingList &&
+            shoppingListOption != ShoppingListOptions.SUGGEST &&
+            shoppingListOption != ShoppingListOptions.EMPTY ? (
+              <>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    onPress={() =>
+                      setShoppingListOption(ShoppingListOptions.AISLE)
+                    }
+                    variant="light"
+                    endContent={<AisleIcon />}
+                  >
+                    Aisles
+                  </Button>
+                  <Divider orientation="vertical" />
+                  <Button
+                    variant="light"
+                    onPress={() =>
+                      setShoppingListOption(ShoppingListOptions.RECIPE)
+                    }
+                    endContent={<RecipeIcon />}
+                  >
+                    Recipes
+                  </Button>
+                </div>
+                <Divider className="my-4" />
+              </>
+            ) : null}
+            {loadingShoppingList ? (
+              <div>Loading your shopping list...</div>
+            ) : (
+              <Card className="bg-lightGoldenSand overflow-y-auto">
+                {shoppingListOption == ShoppingListOptions.EMPTY && (
+                  <>
+                    <CardHeader className="font-bold text-sm justify-between">
+                      You {" don't "} have any recipes added to your Meal Plan.
+                      <Button isIconOnly variant="light">
+                        <CloseIcon className="text-md" />
+                      </Button>
+                    </CardHeader>
+                    <CardBody className="text-xs">
+                      <div>
+                        Get started by exploring{" "}
+                        <span className="font-bold">Suggested Recipes</span> and
+                        adding a recipe to your Meal Plan.
+                      </div>
+                    </CardBody>
+                  </>
+                )}
+                {shoppingListOption == ShoppingListOptions.SUGGEST && (
+                  <>
+                    <CardHeader className="font-bold text-sm justify-between">
+                      Need a Shopping List for your Meal Plan?
+                      <Button isIconOnly variant="light">
+                        <CloseIcon className="text-md" />
+                      </Button>
+                    </CardHeader>
+                    <CardBody className="text-xs">
+                      Add all the ingredients you need for your Plan with a
+                      click! Want your customized list?
+                    </CardBody>
+                    <CardFooter className="space-x-4">
+                      <Button
+                        onPress={() => {
+                          setShoppingListOption(ShoppingListOptions.RECIPE);
+                        }}
+                        className="bg-coralSunset text-lightGoldenSand"
+                      >
+                        Make My List
+                      </Button>
+                      <Button
+                        variant="bordered"
+                        className="border-coralSunset text-coralSunset"
+                      >
+                        Not Now
+                      </Button>
+                    </CardFooter>
+                  </>
+                )}
+                {shoppingListOption == ShoppingListOptions.AISLE && (
+                  <CardBody>
+                    <Accordion
+                      selectionMode="multiple"
+                      defaultExpandedKeys={["0"]}
+                    >
+                      {shoppingListByAisle.map((aisle, index) => (
+                        <AccordionItem
+                          key={index}
+                          aria-label={aisle.name}
+                          title={
+                            <div>
+                              {aisle.name + " "}
+                              <span className="text-coralSunset font-bold">
+                                {"("}
+                                {countNumUnboughtIngredients(aisle.ingredients)}
+                                {")"}
+                              </span>
+                            </div>
+                          }
+                        >
+                          {aisle.ingredients.map((ingredient, index) => (
+                            <div key={index} className="space-y-2">
+                              <Checkbox
+                                onChange={() =>
+                                  toggleBoughtIngredientList(
+                                    ingredient.name,
+                                    ingredient.unit
+                                  )
+                                }
+                                defaultSelected={ingredient.isBought}
+                                lineThrough={ingredient.isBought}
+                                value={ingredient.name}
+                              >
+                                <div>
+                                  {`${ingredient.amount} ${ingredient.unit} ${ingredient.name}`}
+                                </div>
+                              </Checkbox>
+                              <Divider />
+                            </div>
+                          ))}
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </CardBody>
+                )}
+                {shoppingListOption == ShoppingListOptions.RECIPE && (
+                  <CardBody>
+                    {shoppingListByRecipe.map((recipe, index) => (
+                      <div key={index} className="flex flex-col mb-10">
+                        <div className="flex items-center space-x-3">
+                          <Image
+                            alt="recipe"
+                            width="100"
+                            height="100"
+                            src={recipe.image}
+                            className="rounded-md"
+                          />
+                          <div className="font-bold">{recipe.name}</div>
+                        </div>
+                        <Divider className="my-2" />
+                        <div className="text-sm flex items-center justify-center">
+                          <div className="flex flex-col items-center">
+                            <div className="text-xl font-bold text-coralSunset">
+                              {recipe.readyInMinutes}
+                            </div>
+                            <div>Minutes</div>
+                          </div>
+                          <Divider orientation="vertical" className="mx-2" />
+                          <div className="flex flex-col items-center">
+                            <div className="text-coralSunset text-xl font-bold">
+                              {recipe.servings}
+                            </div>
+                            <div>Servings</div>
+                          </div>
+                          <Divider orientation="vertical" className="mx-2" />
+                          <div className="flex flex-col items-center">
+                            <div className="text-coralSunset text-xl font-bold">
+                              {countNumUnboughtIngredients(recipe.ingredients)}
+                            </div>
+                            <div>Ingredients</div>
+                          </div>
+                        </div>
+                        <Divider className="my-2" />
+                        {recipe.ingredients.map((ingredient, index) => (
                           <div key={index} className="space-y-2">
                             <Checkbox
+                              defaultSelected={ingredient.isBought}
+                              lineThrough={ingredient.isBought}
                               onChange={() =>
                                 toggleBoughtIngredientList(
                                   ingredient.name,
                                   ingredient.unit
                                 )
                               }
-                              defaultSelected={ingredient.isBought}
-                              lineThrough={ingredient.isBought}
                               value={ingredient.name}
                             >
-                              <div>
-                                {`${ingredient.amount} ${ingredient.unit} ${ingredient.name}`}
+                              <div className="flex justify-center space-x-1">
+                                <p>{ingredient.amount}</p>
+                                <p>{ingredient.unit}</p>
+                                <p>{ingredient.name}</p>
                               </div>
                             </Checkbox>
                             <Divider />
                           </div>
                         ))}
-                      </AccordionItem>
+                      </div>
                     ))}
-                  </Accordion>
-                </CardBody>
-              )}
-              {shoppingListOption == ShoppingListOptions.RECIPE && (
-                <CardBody>
-                  {shoppingListByRecipe.map((recipe, index) => (
-                    <div key={index} className="flex flex-col mb-10">
-                      <div className="flex items-center space-x-3">
-                        <Image
-                          alt="recipe"
-                          width="100"
-                          height="100"
-                          src={recipe.image}
-                          className="rounded-md"
-                        />
-                        <div className="font-bold">{recipe.name}</div>
-                      </div>
-                      <Divider className="my-2" />
-                      <div className="text-sm flex items-center justify-center">
-                        <div className="flex flex-col items-center">
-                          <div className="text-2xl font-bold text-coralSunset">
-                            {recipe.readyInMinutes}
-                          </div>
-                          <div>Minutes</div>
-                        </div>
-                        <Divider orientation="vertical" className="mx-5" />
-                        <div className="flex flex-col items-center">
-                          <div className="text-coralSunset text-2xl font-bold">
-                            {recipe.servings}
-                          </div>
-                          <div>Servings</div>
-                        </div>
-                        <Divider orientation="vertical" className="mx-5" />
-                        <div className="flex flex-col items-center">
-                          <div className="text-coralSunset text-2xl font-bold">
-                            {countNumUnboughtIngredients(recipe.ingredients)}
-                          </div>
-                          <div>Ingredients</div>
-                        </div>
-                      </div>
-                      <Divider className="my-2" />
-                      {recipe.ingredients.map((ingredient, index) => (
-                        <div key={index} className="space-y-2">
-                          <Checkbox
-                            defaultSelected={ingredient.isBought}
-                            lineThrough={ingredient.isBought}
-                            onChange={() =>
-                              toggleBoughtIngredientList(
-                                ingredient.name,
-                                ingredient.unit
-                              )
-                            }
-                            value={ingredient.name}
-                          >
-                            <div className="flex justify-center space-x-1">
-                              <p>{ingredient.amount}</p>
-                              <p>{ingredient.unit}</p>
-                              <p>{ingredient.name}</p>
-                            </div>
-                          </Checkbox>
-                          <Divider />
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-                </CardBody>
-              )}
-            </Card>
-          )}
-        </div>
-      </div>
-      {isModalOpen && (
-        <Modal
-          size="lg"
-          isOpen={recipeModalConfig.isOpen}
-          onOpenChange={recipeModalConfig.onOpenChange}
-          isDismissable={false}
-          isKeyboardDismissDisabled={true}
-          className="text-black"
-        >
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalBody className="grid grid-cols-2 m-4">
-                  <div className="flex flex-col">
-                    <p className="font-bold">{activeRecipe?.name}</p>
-                    <p className="text-sm text-gray-400">
-                      {activeRecipe?.author}
-                    </p>
-                    <div className="flex items-center">
-                      <Rating
-                        name="half-rating-read"
-                        defaultValue={activeRecipe?.rating}
-                        precision={0.1}
-                        readOnly
-                        className="mr-2"
-                      />
-                      <div className="text-sm text-yellow-400">(4)</div>
-                    </div>
-                  </div>
-                  <Image
-                    width="500"
-                    height="500"
-                    alt="modal image"
-                    src={activeRecipe?.image}
-                    className="h-[150px] rounded-xl"
-                  />
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
-                    Close
-                  </Button>
-                  <Button
-                    color="primary"
-                    onPress={() => {
-                      onClose();
-                      mealPlanModalConfig.onOpen();
-                    }}
-                  >
-                    Proceed
-                  </Button>
-                </ModalFooter>
-              </>
+                  </CardBody>
+                )}
+              </Card>
             )}
-          </ModalContent>
-        </Modal>
-      )}
-      {isModalOpen && (
-        <Modal
-          isOpen={mealPlanModalConfig.isOpen}
-          onOpenChange={mealPlanModalConfig.onOpenChange}
-          isDismissable={false}
-          isKeyboardDismissDisabled={true}
-          className="text-black"
-        >
-          <ModalContent className="text-black">
-            {(onClose) => (
-              <>
-                <ModalBody className="m-3">
-                  <div className="text-center text-xs">
-                    Please select a day and meal for each serving of the recipe!
-                  </div>
-                  <MenuPlanModalDropdown firstOption="Serving 1">
-                    {Array.from({
-                      length: activeRecipe.servings,
-                    }).map((_, i) => (
-                      <DropdownItem
-                        onClick={() => {
-                          setDisplayMealDropdown(false);
-                          setCurrentServing(i);
-                        }}
-                        textValue={"Serving " + (i + 1)}
-                        key={"Serving " + (i + 1)}
-                      >
-                        Serving {i + 1}
-                      </DropdownItem>
-                    ))}
-                  </MenuPlanModalDropdown>
-                  {displayMealDropdown && (
-                    <>
-                      <MenuPlanModalDropdown
-                        firstOption={
-                          getFullyOccupiedDays(weekPlan).includes(
-                            mealPlan[currentServing]["day"]
-                          )
-                            ? getEarliestFreeDay(weekPlan)
-                            : mealPlan[currentServing]["day"]
-                        }
-                        disabledKeys={getFullyOccupiedDays(weekPlan)}
-                      >
-                        {DAYS.map((day) => (
+          </div>
+        </div>
+        {isModalOpen && (
+          <Modal
+            size="lg"
+            isOpen={recipeModalConfig.isOpen}
+            onOpenChange={recipeModalConfig.onOpenChange}
+            isDismissable={false}
+            isKeyboardDismissDisabled={true}
+            className="text-black bg-lightGoldenSand"
+            hideCloseButton={true}
+          >
+            <ModalContent>
+              {(onClose) => (
+                <>
+                  <ModalBody className="grid grid-cols-2 m-4">
+                    <div className="flex flex-col">
+                      <p className="font-bold">{activeRecipe?.name}</p>
+                      <p className="text-sm text-gray-600">
+                        {activeRecipe?.author}
+                      </p>
+                      <div className="flex items-center">
+                        <Rating
+                          name="recipe rating"
+                          defaultValue={activeRecipe?.rating}
+                          precision={0.1}
+                          readOnly
+                          className="mr-2"
+                        />
+                        <div className="text-sm text-yellow-400">(4)</div>
+                      </div>
+                    </div>
+                    <Image
+                      width="500"
+                      height="500"
+                      alt="modal image"
+                      src={activeRecipe?.image}
+                      className="h-[150px] rounded-xl"
+                    />
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button color="danger" variant="light" onPress={onClose}>
+                      Close
+                    </Button>
+                    <Button
+                      color="primary"
+                      onPress={() => {
+                        onClose();
+                        mealPlanModalConfig.onOpen();
+                      }}
+                    >
+                      Proceed
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        )}
+        {isModalOpen && (
+          <Modal
+            isOpen={mealPlanModalConfig.isOpen}
+            onOpenChange={mealPlanModalConfig.onOpenChange}
+            isDismissable={false}
+            isKeyboardDismissDisabled={true}
+            className="text-black bg-lightGoldenSand"
+            size="lg"
+            hideCloseButton={true}
+          >
+            <ModalContent className="text-black">
+              {(onClose) => (
+                <>
+                  <ModalBody className="flex flex-col items-center p-5 w-full">
+                    <div className="text-center text-sm font-bold">
+                      Please select a day and meal for each serving of the
+                      recipe!
+                    </div>
+                    <div className="flex space-x-10">
+                      <MenuPlanModalDropdown firstOption="Serving 1">
+                        {Array.from({
+                          length: activeRecipe.servings,
+                        }).map((_, i) => (
                           <DropdownItem
                             onClick={() => {
-                              setCurrentDay(day);
-                              handleMealPlanChange("day", day);
+                              setDisplayMealDropdown(false);
+                              setCurrentServing(i);
                             }}
-                            textValue={day}
-                            key={day}
+                            textValue={"Serving " + (i + 1)}
+                            key={"Serving " + (i + 1)}
                           >
-                            {day}
+                            Serving {i + 1}
                           </DropdownItem>
                         ))}
                       </MenuPlanModalDropdown>
+                      {displayMealDropdown && (
+                        <>
+                          <MenuPlanModalDropdown
+                            firstOption={
+                              getFullyOccupiedDays(weekPlan).includes(
+                                mealPlan[currentServing]["day"]
+                              )
+                                ? getEarliestFreeDay(weekPlan)
+                                : mealPlan[currentServing]["day"]
+                            }
+                            disabledKeys={getFullyOccupiedDays(weekPlan)}
+                          >
+                            {DAYS.map((day) => (
+                              <DropdownItem
+                                onClick={() => {
+                                  setCurrentDay(day);
+                                  handleMealPlanChange("day", day);
+                                }}
+                                textValue={day}
+                                key={day}
+                              >
+                                {day}
+                              </DropdownItem>
+                            ))}
+                          </MenuPlanModalDropdown>
 
-                      <MenuPlanModalDropdown
-                        firstOption={
-                          getOccupiedMeals(weekPlan, currentDay).includes(
-                            mealPlan[currentServing]["meal"]
-                          )
-                            ? getEarliestFreeMeal(weekPlan, currentDay)
-                            : mealPlan[currentServing]["meal"]
-                        }
-                        disabledKeys={getOccupiedMeals(weekPlan, currentDay)}
-                      >
-                        {MEALS.map((meal) => (
-                          <DropdownItem
-                            onClick={() => handleMealPlanChange("meal", meal)}
-                            textValue={meal}
-                            key={meal}
+                          <MenuPlanModalDropdown
+                            firstOption={
+                              getOccupiedMeals(weekPlan, currentDay).includes(
+                                mealPlan[currentServing]["meal"]
+                              )
+                                ? getEarliestFreeMeal(weekPlan, currentDay)
+                                : mealPlan[currentServing]["meal"]
+                            }
+                            disabledKeys={getOccupiedMeals(
+                              weekPlan,
+                              currentDay
+                            )}
                           >
-                            {meal}
-                          </DropdownItem>
-                        ))}
-                      </MenuPlanModalDropdown>
-                    </>
-                  )}
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    color="danger"
-                    variant="light"
-                    onPress={() => {
-                      onClose();
-                      setIsModalOpen(false);
-                    }}
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    color="primary"
-                    onPress={() => {
-                      onClose();
-                      setIsModalOpen(false);
-                      handleAddToMealPlan();
-                      setCurrentServing(0);
-                    }}
-                  >
-                    Add to meal plan
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      )}
+                            {MEALS.map((meal) => (
+                              <DropdownItem
+                                onClick={() =>
+                                  handleMealPlanChange("meal", meal)
+                                }
+                                textValue={meal}
+                                key={meal}
+                              >
+                                {meal}
+                              </DropdownItem>
+                            ))}
+                          </MenuPlanModalDropdown>
+                        </>
+                      )}
+                      <Spacer y={32} />
+                    </div>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="danger"
+                      variant="light"
+                      onPress={() => {
+                        onClose();
+                        setIsModalOpen(false);
+                      }}
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      color="primary"
+                      onPress={() => {
+                        onClose();
+                        setIsModalOpen(false);
+                        handleAddToMealPlan();
+                        setCurrentServing(0);
+                      }}
+                    >
+                      Add to meal plan
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        )}
+      </div>
     </DndContext>
   );
 }

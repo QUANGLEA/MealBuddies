@@ -9,6 +9,7 @@ import DietCarousel from "../../components/carousels/DietCarousel";
 import IncludeIngredientCarousel from "../../components/carousels/IncludeIngredientCarousel";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Spacer } from "@nextui-org/react";
 
 export default function Start() {
   const router = useRouter();
@@ -80,14 +81,17 @@ export default function Start() {
     selectedAllergies,
     selectedDiets,
     selectedIngredients,
+    router,
   ]);
 
   return (
     <>
       {session && (
-        <main className="flex flex-col w-screen h-screen items-center bg-gray-200">
-          <div className="mt-1 mb-1 h-24"></div>
-          <div className="text-black">Hello {session.user.name}</div>
+        <main className="flex flex-col w-screen h-screen items-center bg-lightGoldenSand">
+          <Spacer y={20} />
+          <div className="text-black font-bold text-2xl mb-20">
+            Hello {session.user.name}
+          </div>
           <Carousel
             ref={carouselRef}
             additionalTransfrom={0}

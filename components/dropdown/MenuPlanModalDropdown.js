@@ -19,18 +19,23 @@ export default function MenuPlanModalDropdown({
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="bordered" className="capitalize">
+        <Button
+          variant="bordered"
+          className="text-black w-full"
+          color="success"
+        >
           {selectedValue}
         </Button>
       </DropdownTrigger>
       <DropdownMenu
         className="text-black"
-        variant="flat"
+        variant="bordered"
         disallowEmptySelection
         selectionMode="single"
         selectedKeys={selectedKeys}
         onSelectionChange={setSelectedKeys}
         disabledKeys={disabledKeys}
+        color="success"
       >
         {children}
       </DropdownMenu>

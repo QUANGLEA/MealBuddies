@@ -15,10 +15,13 @@ import porkSteakImg from "@/public/images/browse/pork_steak.jpg";
 import butterChickenImg from "@/public/images/browse/butter_chicken.jpg";
 import friedRiceImg from "@/public/images/browse/fried_rice.jpg";
 import RecipeCard from "@/components/browse/RecipeCard";
+import { signOutUserAction } from "@/data/actions/auth-actions";
+import { useRouter } from "next/navigation";
 
 const CAROUSEL_IMAGES = [porkSteakImg, butterChickenImg, friedRiceImg];
 
 export default function Browse() {
+  const router = useRouter();
   const [apiRecipes, setApiRecipes] = useState(
     Array.from({ length: 10 }, () => ({
       id: 716426,
@@ -62,8 +65,6 @@ export default function Browse() {
       servings: 4,
       rating: 4.7,
       calories: 580,
-      isFavorited: false,
-      isSaved: false,
     }))
   );
   const [aiRecipes, setAiRecipes] = useState(
@@ -112,19 +113,14 @@ export default function Browse() {
     }))
   );
 
-  /* useEffect(() => {
+  useEffect(() => {
     // Fetch API recipes
-    fetch("/api/recipes")
+    fetch("/api/recipe/getRandomRecipes")
       .then((response) => response.json())
       .then((data) => setApiRecipes(data));
+  }, []);
 
-    // Fetch AI-generated recipes
-    fetch("/api/ai-recipes")
-      .then((response) => response.json())
-      .then((data) => setAiRecipes(data));
-  }, []); */
-
-  const updateRecipe = async (recipeId) => {};
+  const updateAPIRecipes = async (recipeId) => {};
 
   return (
     <div className="min-h-screen p-8 bg-lightGoldenSand text-black">
@@ -139,11 +135,13 @@ export default function Browse() {
         </div>
         <div className="flex items-center space-x-3">
           <Avatar
+            onClick={() => signOutUserAction()}
             isBordered
             color="danger"
+            className="cursor-pointer"
             src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
           />
-          <div className="min-w-max">Quang Le</div>
+          <div className="min-w-max">John Doe</div>
         </div>
       </header>
       <div className="flex h-full">
@@ -157,7 +155,10 @@ export default function Browse() {
             <li className="flex bg-black rounded-full text-white items-center px-3 py-1">
               <SearchIcon size={18} className="mr-2" /> Browse
             </li>
-            <li className="flex items-center px-3 py-1">
+            <li
+              className="flex items-center px-3 py-1 cursor-pointer"
+              onClick={() => router.push("/prep")}
+            >
               <CalendarMonthIcon size={18} className="mr-2" /> Prep
             </li>
           </ul>

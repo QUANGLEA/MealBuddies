@@ -27,7 +27,7 @@ export async function addFavoritedRecipe(favoritedRecipe) {
       const updatedFavoritedRecipes = await FavoritedRecipe.findByIdAndUpdate(
         existingFavoritedRecipesId,
         { $push: { recipes: recipe } },
-        { new: true, useFindAndModify: false }
+        { new: true }
       );
       console.log("Favorited Recipes added", updatedFavoritedRecipes);
     } else {
@@ -67,7 +67,7 @@ export async function removeFavoritedRecipe(recipeId) {
         // Perform the removal using $pull
         const updatedFavoritedRecipes = await FavoritedRecipe.findByIdAndUpdate(
           existingFavoritedRecipesId,
-          { $pull: { recipes: { id: recipeId } } }, // Remove recipe with the matching id
+          { $pull: { recipes: { id: recipeId } } },
           { new: true, useFindAndModify: false }
         );
 

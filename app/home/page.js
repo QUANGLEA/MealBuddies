@@ -33,8 +33,10 @@ const foodAvatars = [
 import { categories } from "@/data/home/categoriesCarouselData";
 import Link from "next/link";
 import { ImageList, ImageListItem } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const [selectedOption, setSelectedOption] = useState(new Set(["Newest"]));
   const selectedOptionValue = Array.from(selectedOption)[0];
 
@@ -74,7 +76,10 @@ export default function Home() {
             Gallery
           </a>
         </nav>
-        <button className="mr-5 px-5 py-2 bg-black text-white rounded-full">
+        <button
+          className="mr-5 px-5 py-2 bg-black text-white rounded-full"
+          onClick={() => router.push("/signin")}
+        >
           Sign Up
         </button>
       </header>

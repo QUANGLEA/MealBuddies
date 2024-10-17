@@ -33,7 +33,7 @@ export default function MultipleCarousel({ children }) {
             max: 464,
             min: 0,
           },
-          items: 1,
+          items: 6,
           partialVisibilityGutter: 30,
         },
         tablet: {

@@ -13,7 +13,7 @@ export const categories = [
   {
     name: "Pizza",
     outlinedIcon: <LocalPizzaOutlinedIcon className="text-white" />,
-    filledIcon: <LocalPizzaIcon className="text-indigoNight" />,
+    filledIcon: <LocalPizzaIcon className="text-black" />,
     mainImg: "/images/home/carousel/pizza.jpg",
     recipes: [
       {
@@ -33,7 +33,7 @@ export const categories = [
   {
     name: "Dessert",
     outlinedIcon: <BakeryDiningOutlinedIcon className="text-white" />,
-    filledIcon: <BakeryDiningIcon className="text-indigoNight" />,
+    filledIcon: <BakeryDiningIcon className="text-black" />,
     mainImg: "/images/home/carousel/dessert.jpg",
     recipes: [
       {
@@ -53,9 +53,7 @@ export const categories = [
   {
     name: "Grill",
     outlinedIcon: <KebabDiningOutlinedIcon className="text-white" />,
-    filledIcon: (
-      <KebabDiningIcon className="text-indigoNight"></KebabDiningIcon>
-    ),
+    filledIcon: <KebabDiningIcon className="text-black"></KebabDiningIcon>,
     mainImg: "/images/home/carousel/grill.jpg",
     recipes: [
       {
@@ -75,7 +73,7 @@ export const categories = [
   {
     name: "Noodles",
     outlinedIcon: <RamenDiningOutlinedIcon className="text-white" />,
-    filledIcon: <RamenDiningIcon className="text-indigoNight" />,
+    filledIcon: <RamenDiningIcon className="text-black" />,
     mainImg: "/images/home/carousel/noodles.jpg",
     recipes: [
       {
@@ -95,7 +93,7 @@ export const categories = [
   {
     name: "Mocktail",
     outlinedIcon: <LocalBarOutlinedIcon className="text-white" />,
-    filledIcon: <LocalBarIcon className="text-indigoNight" />,
+    filledIcon: <LocalBarIcon className="text-black" />,
     mainImg: "/images/home/carousel/mocktail.jpg",
     recipes: [
       {

@@ -28,5 +28,21 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [flowbite.plugin(), nextui()],
+  plugins: [
+    flowbite.plugin(),
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            lightGoldenSand: "#f9e1b8",
+            goldenSand: "#f2cc8f",
+            sageGreen: "#81b29a",
+            indigoNight: "#3d405b",
+            success: "#e07a5f",
+            ivoryCream: "#f4f1de",
+          },
+        },
+      },
+    }),
+  ],
 };

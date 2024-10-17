@@ -9,6 +9,7 @@ export default function CuisineCarousel({ handleSelectCuisine }) {
       <MultipleCarousel>
         {cuisines.map((cuisine, index) => (
           <CuisineCard
+            className="w-full"
             name={cuisine.name}
             img={cuisine.img}
             handleSelectCuisine={handleSelectCuisine}
